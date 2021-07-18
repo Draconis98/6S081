@@ -5,7 +5,7 @@
 	> Created Time: Sun Jul 18 21:45:43 2021
  ************************************************************************/
 
-#include "kernel/tpyes.h"
+#include "kernel/types.h"
 #include "kernel/stat.h"
 #include "user/user.h"
 
