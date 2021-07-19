@@ -55,7 +55,7 @@ void find(char* dir, char* filename){
 
 		if (st.type == T_DIR)
 			find(buf, filename);
-		else if (st.type == T_FILE && strcmp(de.name, filename))
+		else if (st.type == T_FILE && !strcmp(de.name, filename))
 			printf("%s\n", buf);
 	}
 }
