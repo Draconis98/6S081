@@ -33,7 +33,7 @@ void find(char* dir, char* filename){
 		return;
 	}
 
-	if (strlen(path) + 1 + DIRSIZ + 1 > sizeof buf){
+	if (strlen(dir) + 1 + DIRSIZ + 1 > sizeof buf){
 		fprintf(2, "find: <dir> too long\n");
 		close(fd);
 		return;
@@ -43,7 +43,7 @@ void find(char* dir, char* filename){
 	p = buf + strlen(buf);
 	*p++ = '/';
 	while (read(fd, &de, sizeof(de)) == sizeof(de)){
-		if (de.inum == 0 || strcmp(de.name, '.') || strcmp(de.name, ".."))
+		if (de.inum == 0 || !strcmp(de.name, '.') || !strcmp(de.name, ".."))
 			continue;
 
 		memmove(p, de.name, DIRSIZ);
