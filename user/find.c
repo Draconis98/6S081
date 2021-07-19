@@ -43,7 +43,7 @@ void find(char* dir, char* filename){
 	p = buf + strlen(buf);
 	*p++ = '/';
 	while (read(fd, &de, sizeof(de)) == sizeof(de)){
-		if (de.inum == 0 || !strcmp(de.name, '.') || !strcmp(de.name, ".."))
+		if (de.inum == 0 || !strcmp(de.name, ".") || !strcmp(de.name, ".."))
 			continue;
 
 		memmove(p, de.name, DIRSIZ);
