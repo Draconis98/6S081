@@ -21,7 +21,7 @@ void find(char* dir, char* filename){
 		return;
 	}
 
-	if (fstst(fd, &st) < 0){
+	if (fstat(fd, &st) < 0){
 		fprintf(2, "find: cannot stat %s\n", dir);
 		close(fd);
 		return;
@@ -54,8 +54,8 @@ void find(char* dir, char* filename){
 		}
 
 		if (st.type == T_DIR)
-			find(buf, file);
-		else if (st.type == T_FILE && strcmp(de.name, file))
+			find(buf, filename);
+		else if (st.type == T_FILE && strcmp(de.name, filename))
 			printf("%s\n", buf);
 	}
 }
