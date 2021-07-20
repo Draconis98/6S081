@@ -11,7 +11,7 @@
 #include "kernel/param.h"
 
 
-int main(int argc. char* argv[]){
+int main(int argc, char* argv[]){
 	if (argc < 4){
 		fprintf(2, "Usage: <cmd> | xargs <cmd>\n");
 		exit(1);
