@@ -12,7 +12,7 @@
 
 
 int main(int argc, char* argv[]){
-	if (argc < 4){
+	if (argc < 2){
 		fprintf(2, "Usage: <cmd> | xargs <cmd>\n");
 		exit(1);
 	}
