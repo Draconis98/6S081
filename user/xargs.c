@@ -28,28 +28,20 @@ int main(int argc, char* argv[]){
 	argvs[argc] = 0;
 
 	char buf[512];
-	while (1){
-		int i = 0;
-		while (1){
-			int len = read(0, &buf[i], 1);
-			if (len == 0 || buf[i] == '\n')
-				break;
-			i++;
-		}
-		if (i == 0)
-			break;
-
-		buf[i] = 0;
+	int n = 0;
+	while ((n = read(0, buf, 512)) > 0){
+		buf[n] = 0;
 		argvs[argc - 1] = buf;
-		
+
 		if (fork() == 0){
-			exec(argvs[0], argvs);
+			exec(argv[0], argvs);
 			exit(0);
 		}
-		else {
+		else 
 			wait(0);
-			exit(0);
-		}
 	}
+
+	exit(0);
+
 	return 0;
 }
