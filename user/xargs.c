@@ -32,7 +32,6 @@ int main(int argc, char* argv[]){
 	paras[argc - 1] = buf;
 	while (read(0, &c, 1)) {
 		if (c == '\n'){
-			paras[argc] = 0;
 			buf[i++] = '\0';
 			if (fork() == 0){
 				exec(paras[0], paras);
@@ -40,9 +39,7 @@ int main(int argc, char* argv[]){
 			}
 			else {
 				wait(0);
-				paras[argc - 1] = buf;
 				i = 0;
-				
 			}
 		}
 		else buf[i++] = c;
