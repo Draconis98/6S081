@@ -154,6 +154,7 @@ UPROGS=\
 	$U/_find\
 	$U/_xargs\
 	$U/_primes\
+	$U/_uptime\
 
 
 ifeq ($(LAB),syscall)

@@ -9,7 +9,7 @@
 #include "kernel/stat.h"
 #include "user/user.h"
 
-int main(int argc. char* argv){
+int main(int argc, char* argv){
 	print("%d\n", uptime());
 	exit(0);
 }
