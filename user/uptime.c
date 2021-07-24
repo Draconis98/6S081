@@ -10,6 +10,6 @@
 #include "user/user.h"
 
 int main(int argc, char* argv){
-	print("%d\n", uptime());
+	printf("%d\n", uptime());
 	exit(0);
 }
