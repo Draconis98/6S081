@@ -13,7 +13,7 @@
 
 int main(int argc, char* argv[]){
 	if (argc < 2){
-		fprintf(2, "Usage: <cmd> | xargs <cmd>\n");
+		fprintf(2, "Usage: xargs <cmd>\n");
 		exit(1);
 	}
 
@@ -22,23 +22,30 @@ int main(int argc, char* argv[]){
 		exit(1);
 	}
 
-	char* argvs[MAXARG];
+	char* paras[MAXARG];
 	for (int i = 1; i < argc; i++)
-		argvs[i - 1] = argv[i];
-	argvs[argc] = 0;
+		paras[i - 1] = argv[i];
 
 	char buf[512];
-	int n = 0;
-	while ((n = read(0, buf, 512)) > 0){
-		buf[n] = 0;
-		argvs[argc - 1] = buf;
-
-		if (fork() == 0){
-			exec(argv[0], argvs);
-			exit(0);
+	char c;
+	int i = 0;
+	paras[argc - 1] = buf;
+	while (read(0, &c, 1)) {
+		if (c == '\n'){
+			paras[argc] = 0;
+			buf[i++] = '\0';
+			if (fork() == 0){
+				exec(paras[0], paras);
+				exit(0);
+			}
+			else {
+				wait(0);
+				paras[argc - 1] = buf;
+				i = 0;
+				
+			}
 		}
-		else 
-			wait(0);
+		else buf[i++] = c;
 	}
 
 	exit(0);
