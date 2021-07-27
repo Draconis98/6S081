@@ -298,7 +298,7 @@ fork(void)
   release(&np->lock);
 
   // trace
-  no->tracemask = p->tracemask;
+  np->tracemask = p->tracemask;
 
   return pid;
 }
