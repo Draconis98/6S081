@@ -705,5 +705,5 @@ uint64 nproc(void){
 		if (p->state != UNUSED)
 			num++;
 
-	return n;
+	return num;
 }
