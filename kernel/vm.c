@@ -207,6 +207,40 @@ uvmcreate()
   return pagetable;
 }
 
+void uvmmap(pagetable_t pagetable, uint64 va, uint64 pa, uint64 size, int perm){
+	if (mappages(pagetable, va, size, pa, perm))
+		panic("uvmmap");
+}
+
+void prockvminit(){
+	// the user's page table 
+	pagetable_t user_pagetable = uvmcreate();
+	if (!user_pagetable)
+		return;
+
+	// uart registers 
+	uvmmap(user_pagetable, UART0, UART0, PGSIZE, PTE_R | PTE_W);
+
+	// virtio mmio disk interface 
+	uvmmap(user_pagetable, VIRTIO0, VIRTIO0, PGSIZE, PTE_R | PTE_W);
+
+	// CLINT 
+	uvmmap(user_pagetable, CLINT, CLINT, 0x10000, PTE_R | PTE_W);
+
+	// PLIC 
+	uvmmap(user_pagetable, PLIC, PLIC, 0x400000, PTE_R | PTE_W);
+
+	// map user text executable and read-only 
+	uvmmap(user_pagetable, KERNBASE, KERNBASE, (uint64)etext-KERNBASE, PTE_R | PTE_X);
+
+	// map user data and the physical RAM we'll make use of.
+	uvmmap(user_pagetable, (uint64)etext, (uint64)etext, PHYSTOP-(uint64)etext, PTE_R | PTE_W);
+
+	// map the trampoline for trap entry/ exit to
+	// the highest virtual address in the kernel.
+	uvmmap(user_pagetable, TRAMPOLINE, (uint64)trampoline, PGSIZE, PTE_R | PTE_X);
+}
+
 // Load the user initcode into address 0 of pagetable,
 // for the very first process.
 // sz must be less than a page.
