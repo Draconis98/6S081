@@ -121,8 +121,8 @@ found:
     return 0;
   }
   
-  p->user_pagetable = prockvminit();
-  if (p->user_pagetable == 0){
+  p->kpagetable = prockvminit();
+  if (p->kpagetable == 0){
 	  freeproc(p);
 	  release(&p->lock);
 	  return 0;
@@ -135,7 +135,7 @@ found:
   if (pa == 0)
 	  panic("kalloc");
   uint64 va = KSTACK((int)(p - proc));
-  uvmmap(p->user_pagetable, va, (uint64)pa, PGSIZE, PTE_R | PTE_W);
+  uvmmap(p->kpagetable, va, (uint64)pa, PGSIZE, PTE_R | PTE_W);
   p->kstack = va;
 
   // Set up new context to start executing at forkret,
@@ -493,10 +493,9 @@ scheduler(void)
         // before jumping back to us.
         p->state = RUNNING;
         c->proc = p;
-        swtch(&c->context, &p->context);
-		
-		w_satp(MAKE_SATP(p->user_pagetable));
+		w_satp(MAKE_SATP(p->kpagetable));
 		sfence_vma();
+        swtch(&c->context, &p->context);
 
         // Process is done running for now.
         // It should have changed its p->state before coming back.
