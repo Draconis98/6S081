@@ -494,6 +494,9 @@ scheduler(void)
         p->state = RUNNING;
         c->proc = p;
         swtch(&c->context, &p->context);
+		
+		w_satp(MAKE_SATP(p->user_pagetable));
+		sfence_vma();
 
         // Process is done running for now.
         // It should have changed its p->state before coming back.
@@ -505,6 +508,7 @@ scheduler(void)
     }
     if(found == 0) {
       intr_on();
+	  kvminithart();
       asm volatile("wfi");
     }
   }
