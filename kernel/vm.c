@@ -212,11 +212,11 @@ void uvmmap(pagetable_t pagetable, uint64 va, uint64 pa, uint64 size, int perm){
 		panic("uvmmap");
 }
 
-void prockvminit(){
+pagetable_t prockvminit(){
 	// the user's page table 
 	pagetable_t user_pagetable = uvmcreate();
 	if (!user_pagetable)
-		return;
+		return 0;
 
 	// uart registers 
 	uvmmap(user_pagetable, UART0, UART0, PGSIZE, PTE_R | PTE_W);
@@ -239,6 +239,8 @@ void prockvminit(){
 	// map the trampoline for trap entry/ exit to
 	// the highest virtual address in the kernel.
 	uvmmap(user_pagetable, TRAMPOLINE, (uint64)trampoline, PGSIZE, PTE_R | PTE_X);
+
+	return user_pagetable;
 }
 
 // Load the user initcode into address 0 of pagetable,
