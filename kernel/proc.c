@@ -21,6 +21,7 @@ static void freeproc(struct proc *p);
 
 extern pagetable_t prockvminit(void); 
 extern void uvmmap(pagetable_t pagetable, uint64 va, uint64 pa, uint64 sz, int perm);
+extern pte_t* walk(pagetable_t pagetable, uint64 va, int alloc);
 
 extern char trampoline[]; // trampoline.S
 
