@@ -151,6 +151,22 @@ found:
   return p;
 }
 
+// Recursivly free pagetable pages 
+// but retain leaf physical addresses
+void proc_freekpagetable(pagetable_t kpagetable){
+	for (int i = 0; i < 512; i++){
+		pte_t pte = kpagetable[i];
+		if (pte & PTE_V){
+			kpagetable[i] = 0;
+			if (!(pte & (PTE_R | PTE_W | PTE_X))){
+				uint64 child = PTE2PA(pte);
+				proc_freekpagetable((pagetable_t)child);
+			}
+		}
+	}
+	kfree((void*)kpagetable);
+}
+
 // free a proc structure and the data hanging from it,
 // including user pages.
 // p->lock must be held.
@@ -181,22 +197,6 @@ freeproc(struct proc *p)
   p->killed = 0;
   p->xstate = 0;
   p->state = UNUSED;
-}
-
-// Recursivly free pagetable pages 
-// but retain leaf physical addresses
-void proc_freekpagetable(pagetable_t kpagetable){
-	for (int i = 0; i < 512; i++){
-		pte_t pte = kpagetable[i];
-		if (pte & PTE_V){
-			kpagetable[i] = 0;
-			if (!(pte & (PTE_R | PTE_W | PTE_X))){
-				uint64 child = PTE2PA(pte);
-				proc_freekpagetable((pagetable_t)child);
-			}
-		}
-	}
-	kfree((void*)kpagetable);
 }
 
 // Create a user page table for a given process,
