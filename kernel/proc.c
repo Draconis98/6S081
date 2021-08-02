@@ -19,6 +19,8 @@ extern void forkret(void);
 static void wakeup1(struct proc *chan);
 static void freeproc(struct proc *p);
 
+extern pagetable_t prockvminit(void); 
+
 extern char trampoline[]; // trampoline.S
 
 // initialize the proc table at boot time.
