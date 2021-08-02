@@ -20,6 +20,7 @@ static void wakeup1(struct proc *chan);
 static void freeproc(struct proc *p);
 
 extern pagetable_t prockvminit(void); 
+extern void uvmmap(pagetable_t pagetable, uint64 va, uint64 pa, uint64 sz, int perm);
 
 extern char trampoline[]; // trampoline.S
 
